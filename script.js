@@ -2,6 +2,7 @@ const apiKey = '6b9f9dffc8cfccd81a37431cb7516917';
 const historyList = document.getElementById('history-list');
 const weatherForecastDiv = document.getElementById('weatherForecast');
 
+// uses the provided API to run a function to look up the weather of a user given city/state
 function searchWeather() {
   const cityInput = document.getElementById('cityInput').value;
   const stateInput = document.getElementById('stateInput').value;
@@ -33,13 +34,14 @@ function displayWeather(data) {
     const windSpeed = day.wind.speed;
 
     const forecastItem = document.createElement('div');
+    forecastItem.classList.add('day-forecast'); // Add a class for styling
     forecastItem.innerHTML = `
-  <p>${date.toDateString()}</p>
-  <img src="http://openweathermap.org/img/wn/${icon}.png" alt="Weather Icon">
-  <p>Temperature: ${temperature} K</p>
-  <p>Humidity: ${humidity}%</p>
-  <p>Wind Speed: ${windSpeed} m/s</p>
-`;
+      <p>${date.toDateString()}</p>
+      <img src="http://openweathermap.org/img/wn/${icon}.png" alt="Weather Icon">
+      <p>Temperature: ${temperature} K</p>
+      <p>Humidity: ${humidity}%</p>
+      <p>Wind Speed: ${windSpeed} m/s</p>
+    `;
 
     weatherForecastDiv.appendChild(forecastItem);
   }
@@ -47,8 +49,7 @@ function displayWeather(data) {
 
 function saveToLocalStorage(city, state) {
   // Retrieve existing history from local storage
-  const history =
-    JSON.parse(localStorage.getItem('weatherHistory')) || [];
+  const history = JSON.parse(localStorage.getItem('weatherHistory')) || [];
 
   // Add new search to history
   const newSearch = `${city}, ${state}`;
@@ -68,8 +69,7 @@ function updateHistoryList() {
   historyList.innerHTML = '';
 
   // Retrieve and display updated history
-  const history =
-    JSON.parse(localStorage.getItem('weatherHistory')) || [];
+  const history = JSON.parse(localStorage.getItem('weatherHistory')) || [];
   history.forEach((search) => {
     const historyItem = document.createElement('li');
     historyItem.textContent = search;
@@ -83,6 +83,15 @@ function loadHistorySearch(search) {
   document.getElementById('cityInput').value = city;
   document.getElementById('stateInput').value = state;
   searchWeather();
+}
+
+// Function to clear search history
+function clearHistory() {
+  // Clear history from local storage
+  localStorage.removeItem('weatherHistory');
+
+  // Update the displayed history
+  updateHistoryList();
 }
 
 // Initial load of search history

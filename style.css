@@ -2,35 +2,82 @@ body {
   font-family: Arial, sans-serif;
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
 }
 
 #container {
   display: flex;
+  flex-direction: column;
   height: 100vh;
 }
 
+#topHalf{
+  display:flex;
+  flex-direction: row;
+}
+
 #search-container {
+  display: flex;
+  flex-direction: column;
   flex: 1;
   padding: 20px;
+  align-items: center;
 }
 
 #forecast-container {
+  display: flex;
+  flex-direction: column;
   flex: 2;
   padding: 20px;
 }
 
+#weatherForecast{
+  display: flex;
+  flex-direction: row;
+}
+
 #history-container {
+  display: flex;
+  flex-direction: column;
   flex: 1;
   padding: 20px;
-  background-color: #f5f5f5;
+  align-items: center;
 }
 
 #history-list {
-  list-style-type: none;
+  list-style-type: circle;
   padding: 0;
 }
 
 #history-list li {
   cursor: pointer;
   margin-bottom: 10px;
+}
+
+#cityInput {
+  max-height: 25px;
+  max-width: 250px;
+}
+
+#stateInput {
+  max-height: 25px;
+  max-width: 250px;
+}
+
+button{
+  max-height: 25px;
+  max-width: 100px;
+}
+
+.day-forecast {
+  width: 100%;
+  border: 1px solid #ddd;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+#fiveDay{
+  display: flex;
+  justify-content: center;
+  width: 100%;
 }
