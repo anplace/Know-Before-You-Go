@@ -6,18 +6,41 @@ const weatherForecastDiv = document.getElementById('weatherForecast');
 function searchWeather() {
   const cityInput = document.getElementById('cityInput').value;
   const stateInput = document.getElementById('stateInput').value;
+
+  if (!cityInput || !stateInput) {
+    openErrorModal('Please enter both city and state.');
+    return;
+  }
+
   const apiUrl = `https://api.openweathermap.org/data/2.5/forecast?q=${cityInput},${stateInput}&appid=${apiKey}`;
 
+  // Function that fetches information from the API and saves it to local storage or throws an error if the city and state aren't legitimate
   fetch(apiUrl)
     .then((response) => response.json())
     .then((data) => {
-      // Display 5-day forecast
       displayWeather(data);
 
-      // Save search history to local storage
       saveToLocalStorage(cityInput, stateInput);
     })
-    .catch((error) => console.error('Error fetching data:', error));
+    .catch((error) => {
+      console.error('Error fetching data:', error);
+      openErrorModal('Error fetching weather data. Please try again.');
+    });
+}
+
+// Opens a modal if the city or state are invalid.
+function openErrorModal(message) {
+  const modal = document.getElementById('errorModal');
+  const modalContent = document.getElementById('modalContent');
+
+  modalContent.textContent = 'Please enter a valid City and State.';
+  modal.style.display = 'block';
+
+  window.onclick = function (event) {
+    if (event.target === modal) {
+      modal.style.display = 'none';
+    }
+  };
 }
 
 function displayWeather(data) {
@@ -34,7 +57,7 @@ function displayWeather(data) {
     const windSpeed = day.wind.speed;
 
     const forecastItem = document.createElement('div');
-    forecastItem.classList.add('day-forecast'); // Add a class for styling
+    forecastItem.classList.add('day-forecast');
     forecastItem.innerHTML = `
       <p>${date.toDateString()}</p>
       <img src="http://openweathermap.org/img/wn/${icon}.png" alt="Weather Icon">
@@ -64,11 +87,10 @@ function saveToLocalStorage(city, state) {
   }
 }
 
+// Function to clear top history city and replace it with the newly searched city.
 function updateHistoryList() {
-  // Clear previous history
   historyList.innerHTML = '';
 
-  // Retrieve and display updated history
   const history = JSON.parse(localStorage.getItem('weatherHistory')) || [];
   history.forEach((search) => {
     const historyItem = document.createElement('li');
@@ -78,6 +100,7 @@ function updateHistoryList() {
   });
 }
 
+// Function to populate the search history cities on the page
 function loadHistorySearch(search) {
   const [city, state] = search.split(', ');
   document.getElementById('cityInput').value = city;
@@ -85,14 +108,10 @@ function loadHistorySearch(search) {
   searchWeather();
 }
 
-// Function to clear search history
+// Function to clear the search history upon user clicking a button. This will also clear the history from local storage.
 function clearHistory() {
-  // Clear history from local storage
   localStorage.removeItem('weatherHistory');
-
-  // Update the displayed history
   updateHistoryList();
 }
 
-// Initial load of search history
 updateHistoryList();
