@@ -10,6 +10,13 @@ body {
   box-sizing: border-box;
 }
 
+.head1{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: underline;
+}
+
 #container {
   display: flex;
   flex-direction: column;
@@ -109,6 +116,8 @@ button {
   margin: 15% auto;
   padding: 20px;
   border: 1px solid #888;
+  border-radius: 10px;
   width: 80%;
   max-width: 400px;
+
 }
